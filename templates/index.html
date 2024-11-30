@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceX Latest Launch</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            line-height: 1.4;
+            overflow: hidden;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+        .crt-overlay::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(0, 255, 0, 0.2) 0%,
+                rgba(0, 0, 0, 0.5) 100%
+            );
+            pointer-events: none;
+        }
+        .screen {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            margin: 2% auto;
+            padding: 20px;
+            border: 20px solid #333;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 0 10px #000,
+                0 0 20px 10px rgba(0, 255, 0, 0.5),
+                inset 0 0 20px rgba(0, 255, 0, 0.2);
+            overflow: auto;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .ascii-art {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            line-height: 1;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        .blink {
+            animation: blink 1s steps(1, end) infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+<div class="crt-overlay"></div>
+<div class="screen">
+<pre>
+<span class="ascii-art">
+   _____                      __   __
+  / ___/____  ____ _________  \ \ / /
+  \__ \/ __ \/ __ `/ ___/ _ \  \ V / 
+ ___/ / /_/ / /_/ / /__/  __/  / . \ 
+/____/ .___/\__,_/\___/\___/  /_/ \_\
+    /_/                              
+</span>
+
++------------------------------------------+
+|        Latest SpaceX Launch Data         |
++------------------------------------------+
+
+Mission: {{ launch_data.name }}
+Date: {{ launch_data.date_utc }}
+Details: {{ launch_data.details or "No details available" }}
+
++------------------------------------------+
+|           Rocket Information             |
++------------------------------------------+
+Rocket ID: {{ launch_data.rocket }}
+Launchpad: {{ launch_data.launchpad }}
+
++------------------------------------------+
+|                 Links                    |
++------------------------------------------+
+Webcast: <a href="{{ launch_data.links.webcast }}" target="_blank">[Watch Here]</a>
+Wikipedia: <a href="{{ launch_data.links.wikipedia }}" target="_blank">[Read More]</a>
+
++------------------------------------------+
+|              Rocket Cores                |
++------------------------------------------+
+{% for core in launch_data.cores %}
+Core ID: {{ core.core }} | Flight: {{ core.flight }} | Landing Type: {{ core.landing_type }}
+{% endfor %}
+
++------------------------------------------+
+|                Images                    |
++------------------------------------------+
+{% if launch_data.links.flickr.original %}
+{% for image in launch_data.links.flickr.original %}
+<a href="{{ image }}" target="_blank">[Launch Image {{ loop.index }}]</a>
+{% endfor %}
+{% else %}
+No images available
+{% endif %}
+
+<span class="ascii-art">
+      /\
+     (  )
+     (  )
+    /|/\|\
+   /_||||_\
+</span>
+
++------------------------------------------+
+|    END OF TRANSMISSION - OVER AND OUT    |
++------------------------------------------+
+
+<span class="blink">_</span>
+</pre>
+</div>
+</body>
+</html>
+
